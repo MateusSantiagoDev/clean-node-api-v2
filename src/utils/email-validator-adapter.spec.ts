@@ -1,3 +1,5 @@
+// basicamente essa class esta implementando a biblioteca do validator
+
 import { EmailValidatorAdapter } from './email-validator-adapter'
 import validator from 'validator'
 
