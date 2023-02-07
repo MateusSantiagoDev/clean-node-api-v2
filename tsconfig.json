@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist", // especificando onde será gerado o código em js
+        "module": "Commonjs", // gera require quando transpilar o código para js
+        "target": "es2019", // gera o js no padrão es2019
+        "esModuleInterop": true, // converte modulos q internamente usam Commonjs
+        "allowJs": true,
+        "strictNullChecks": false
+    }
+}
