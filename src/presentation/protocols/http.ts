@@ -1,5 +1,5 @@
 export interface HttpResponse {
-  statusCode: 400
+  statusCode: number
   body: any
 }
 
