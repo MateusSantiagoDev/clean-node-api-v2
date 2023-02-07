@@ -23,7 +23,7 @@ const makeAddAccount = (): AddAccount => {
       const accountFake = {
         id: 'valid_id',
         name: 'valid_name',
-        email: 'valid_email',
+        email: 'valid_email@mail.com',
         password: 'valid_password'
       }
       return Promise.resolve(accountFake)
@@ -216,6 +216,27 @@ describe('SignUp Controller', () => {
     }
     await sut.handle(httpRequest)
     expect(addSpy).toBeCalledWith({
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    })
+  })
+
+  // return de status 200 em caso de sucesso
+  test('Should return 200 if valid data is provided', async () => {
+    const { sut } = makeSut()
+    const httpRquest = {
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    }
+    const httpResponse = await sut.handle(httpRquest)
+    expect(httpResponse.statusCode).toEqual(200)
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
       name: 'valid_name',
       email: 'valid_email@mail.com',
       password: 'valid_password'
