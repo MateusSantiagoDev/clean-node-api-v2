@@ -2,6 +2,7 @@ import { SignUpController } from './signup'
 import { MissingParamError } from '../error/missing-param-error'
 import { EmailValidator } from '../protocols/email-validator'
 import { InvalidParamError } from '../error/invalid-param-error'
+import { ServerError } from '../error/server.error'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -140,5 +141,24 @@ describe('SignUp Controller', () => {
     await sut.handle(httpRequest)
     // toHaveBeenCalledWith compara se os dados são iguais
     expect(isvalidSpy).toHaveBeenCalledWith('any_email@mail.com')
+  })
+
+  // testa se ocorrer uma excessão
+  test('Should return 500 if EmailValidator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
