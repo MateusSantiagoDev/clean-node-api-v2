@@ -3,8 +3,7 @@
 // o usuário com as informações recebidas
 // porem antes a senha precisa ser cyptografada...
 
-import { resolve } from 'path'
-import { Encrypter } from '../../protocols/encrypter'
+import { Encrypter } from './db-add-account-protocols'
 import { DbAddAccount } from './db-add-account'
 
 interface SutTypes {
