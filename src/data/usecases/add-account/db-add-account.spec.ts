@@ -61,7 +61,7 @@ describe('DbAddAccount Usecase', () => {
     expect(encryptStub).toHaveBeenCalledWith('valid_password')
   })
 
-  // teste para garantir que se houver uma excessão não será
+  // teste para garantir que se houver uma excessão no encrypterStub, não será
   // tratada aqui dentro, a excessão será repassada
   test('Should throw if Encrypter throws', async () => {
     const { sut, encrypterStub } = makeSut()
@@ -94,5 +94,20 @@ describe('DbAddAccount Usecase', () => {
       email: 'valid_email',
       password: 'hashed_password'
     })
+  })
+
+  // teste para garantir que se houver uma excessão no addAccountRepositoryStub,
+  // não será tratada aqui dentro, a excessão será repassada
+  test('Should throw if Encrypter throws', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    // linha 51 e 52 forço o teste a retornar uma excessão
+    jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_password'
+    }
+    const promise = sut.add(accountData)
+    await expect(promise).rejects.toThrow()
   })
 })
