@@ -1,5 +1,4 @@
-// arquivo onde vai rodar o servdor
-import express from 'express'
+// arquivo onde vai rodar o servidor
+import app from './config/app'
 
-const app = express()
 app.listen(5050, () => console.log('Servidor running at http://localhost:5050'))
