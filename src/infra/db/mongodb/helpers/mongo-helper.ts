@@ -1,4 +1,5 @@
 import { MongoClient, Collection } from 'mongodb'
+import { Account } from '../../../../domain/model/account'
 
 // basicamente esse obj MongoHelper connecta e desconecta com o banco
 export const MongoHelper = {
@@ -16,5 +17,11 @@ export const MongoHelper = {
   getCollection (name: string): Collection {
     // essa é a sintaxe para acessar uma colection do mongodb
     return this.client.db().collection(name)
+  },
+
+  // metodo generico para remover o underscore do ID
+  mapper: (collection: any): any => {
+    const { _id, ...collectionWiththoutId } = collection
+    return Object.assign({}, collectionWiththoutId, { id: _id })
   }
 }

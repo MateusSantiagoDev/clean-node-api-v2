@@ -8,12 +8,10 @@ import { MongoHelper } from '../helpers/mongo-helper'
 // local para poder fazer testes...
 export class AccountMongoRepository implements AddAccountRepository {
   async add (accountData: AccountModel): Promise<Account> {
-    // nas linhas 12, 13 estou criando a collection 'accounts' e acessando
+    // nas linhas 14, 15 estou criando a collection 'accounts' e acessando
     // o método insertOne do mongodb para inserir dados na collection
     const accountCollection = MongoHelper.getCollection('accounts')
     const result = await accountCollection.insertOne(accountData)
-    const account = result.ops[0]
-    const { _id, ...dataAccount } = account
-    return Object.assign({}, dataAccount, { id: _id })
+    return MongoHelper.mapper(result.ops[0])
   }
 }
