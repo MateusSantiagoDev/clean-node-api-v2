@@ -10,7 +10,7 @@ export class AccountMongoRepository implements AddAccountRepository {
   async add (accountData: AccountModel): Promise<Account> {
     // nas linhas 14, 15 estou criando a collection 'accounts' e acessando
     // o método insertOne do mongodb para inserir dados na collection
-    const accountCollection = MongoHelper.getCollection('accounts')
+    const accountCollection = await MongoHelper.getCollection('accounts')
     const result = await accountCollection.insertOne(accountData)
     return MongoHelper.mapper(result.ops[0])
   }
