@@ -14,7 +14,7 @@ describe('Account Mongo Repository', () => {
 
   // metodo para zerar as tabelas entre os testes
   beforeEach(async () => {
-    const accountCollection = MongoHelper.getCollection('accounts')
+    const accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
