@@ -1,4 +1,5 @@
 import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
+import { LogErrorRepository } from '../../data/protocols/log-error-repository'
 
 // decorrator defoult que implementa o protocolo do controller
 // e esta adicionando uma camada a mais ao meu controllador
@@ -6,8 +7,10 @@ import { Controller, HttpRequest, HttpResponse } from '../../presentation/protoc
 // sem modificar o controlador
 export class LogControllerDecorator implements Controller {
   private readonly controller: Controller
-  constructor (controller: Controller) {
+  private readonly logErrorRepository: LogErrorRepository
+  constructor (controller: Controller, logErrorRepository: LogErrorRepository) {
     this.controller = controller
+    this.logErrorRepository = logErrorRepository
   }
   // como as rotas na 'makeSignUpController' implementam um 'Controller'
   // e o controller tem uma assinatura 'handle (httpRequest: HttpRequest):
@@ -16,10 +19,11 @@ export class LogControllerDecorator implements Controller {
 
   // dessa forma estou criando uma camanad a mais e tornando o meu
   // método mais generico
-  async handle (httpRequest: HttpRequest): Promise <HttpResponse> {
+  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const httpResponse = await this.controller.handle(httpRequest)
-    // adicionando um método a mais no decorator e consequentemente
-    // ao 'SignUpController' pois esta sendo instanciado
+    if (httpResponse.statusCode === 500) {
+      await this.logErrorRepository.log(httpResponse.body.stack)
+    }
     return httpResponse
   }
 }
