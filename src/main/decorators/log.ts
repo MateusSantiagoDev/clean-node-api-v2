@@ -17,10 +17,9 @@ export class LogControllerDecorator implements Controller {
   // dessa forma estou criando uma camanad a mais e tornando o meu
   // método mais generico
   async handle (httpRequest: HttpRequest): Promise <HttpResponse> {
-    await this.controller.handle(httpRequest)
+    const httpResponse = await this.controller.handle(httpRequest)
     // adicionando um método a mais no decorator e consequentemente
     // ao 'SignUpController' pois esta sendo instanciado
-
-    return null // como estou usando o await na linha 20 posso retornar null
+    return httpResponse
   }
 }
